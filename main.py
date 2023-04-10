@@ -1,6 +1,7 @@
 import sys
 import pygame
 import views
+import player
 
 class Main():
     running = True
@@ -15,6 +16,9 @@ class Main():
         pygame.display.set_caption("tic tac toe")
         self.view = views.StartView(self)
         self.clock = pygame.time.Clock()
+        # introduce two players
+        self.player_1 = player.Player(0, surface=self.screen)
+        self.player_2 = player.Player(1, surface=self.screen)
 
     def run(self):
         while self.running:

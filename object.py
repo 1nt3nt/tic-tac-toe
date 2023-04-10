@@ -1,14 +1,17 @@
 import pygame
 
+clicked_obj = None
 class Objects:
     def __init__(self,x,y):
         self.u = x
         self.v = y
-    def draw(self):
+        self.name = 'object'
+    def draw(self, screen):
         pass
-    def get_object(self,event):
+    def on_event(self,event):
         pass
-        
+    def get_name(self):
+        return self.name
 
 class Grid(Objects):
     def __init__(self, x, y, width, height):
@@ -18,19 +21,34 @@ class Grid(Objects):
         self.h = height
         self.rect = None
         self.name = 'grid'
+        self.status = False # indicate if it is placed by a piece
         self.clicked = False
 
     def draw(self, screen):
         self.rect = pygame.draw.rect(screen, (255,255,255), pygame.Rect(self.u,self.v, self.w, self.h), 2)
 
-    def get_object(self, event):
+    def on_event(self, event,surface):
         pos = pygame.mouse.get_pos()
         if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
             self.clicked = True
-            if pygame.Rect.collidepoint(self.rect,pos[0],pos[1]):
-                print(self.name)
+            if pygame.Rect.collidepoint(self.rect,pos[0],pos[1]) and self.status == False:
+                self.status = True
+                center = self.get_middle(pos)
+                pygame.draw.circle(surface, (255,0,0), center, min(self.w//2,self.h//2)-4)
         if pygame.mouse.get_pressed()[0] == 0:
             self.clicked = False
+    
+    def get_status(self):
+        return self.status
+    
+    # return middle point of each grid
+    def get_middle(self, pos):
+        if (self.u <= pos[0] 
+            and self.u+self.w >= pos[0] 
+            and self.v <= pos[1] 
+            and self.v+self.h >= pos[1] ):
+            midpoint = (self.u+self.w//2, self.v+self.h//2)
+            return midpoint
 
 class Button(Objects):
     def __init__(self,x,y,img,scale):
@@ -57,9 +75,11 @@ class Button(Objects):
         return action  
     
 
-class Piece(Objects):
-    def __init__(self, x, y):
+class Piece(Grid):
+    def __init__(self, x=0, y=0):
         self.name = 'piece'
+        self.rect = None
+        self.clicked = False
 
     def draw(self, surface, uid):
         if uid == 0:
@@ -68,3 +88,7 @@ class Piece(Objects):
 
         if uid == 1:
             pygame.draw.circle(surface, (255,255,255), (self.u,self.v), 35)
+    
+    # return the status that if piece is placed.
+    def on_event(self, event, surface):
+        return super().get_object(event, surface)

@@ -53,17 +53,18 @@ class GameView(Views):
         
         for grid in self.grids:
             grid.draw(self.context.screen)
-    
+
     def on_event(self, event):
-        self.grids[0].get_object(event)
-        self.grids[1].get_object(event)
-        self.grids[2].get_object(event)
-        self.grids[3].get_object(event)
-        self.grids[4].get_object(event)
-        self.grids[5].get_object(event)
-        self.grids[6].get_object(event)
-        self.grids[7].get_object(event)
-        self.grids[8].get_object(event)
+        self.grids[0].on_event(event,self.context.screen)
+        self.grids[1].on_event(event,self.context.screen)
+        self.grids[2].on_event(event,self.context.screen)
+        self.grids[3].on_event(event,self.context.screen)
+        self.grids[4].on_event(event,self.context.screen)
+        self.grids[5].on_event(event,self.context.screen)
+        self.grids[6].on_event(event,self.context.screen)
+        self.grids[7].on_event(event,self.context.screen)
+        self.grids[8].on_event(event,self.context.screen)
+        
 
 
 """ 
