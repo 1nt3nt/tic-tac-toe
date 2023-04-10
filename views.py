@@ -1,0 +1,102 @@
+import pygame
+import sys
+import factory
+
+factory = factory.Factory()
+class Views:
+    screen = None
+    def __init__(self, surface):
+        self.screen = surface
+
+    def run_ui(self):
+        pass
+
+    def on_event(self, event):
+        pass
+
+""" 
+    THIS IS A MESH CLASS
+"""
+class GameView(Views):
+    # parameter:
+    # left top point and right point point, 
+    # left bottom point and right bottom point
+    def __init__(self, l_t_p, r_t_p, l_b_p, r_b_p, context):
+        self.p1 = l_t_p
+        self.p2 = r_t_p
+        self.p3 = l_b_p
+        self.p4 = r_b_p
+        # col
+        self.col1 = (self.p2[0] - self.p1[0]) // 3
+        self.col2 = 2 * self.col1
+        # row
+        self.row1 = (self.p4[1] - self.p1[1]) // 3
+        self.row2 = 2 * self.row1
+        self.vertices = [self.p1, (self.p1[0]+self.col1, self.p1[1]), (self.p1[0]+self.col2, self.p1[1]),
+                    (self.p1[0],self.p1[1]+self.row1), (self.p1[0]+self.col1,self.p1[1]+self.row1), (self.p1[0]+self.col2,self.p1[1]+self.row1),
+                    (self.p1[0],self.p1[1]+self.row2), (self.p1[0]+self.col1,self.p1[1]+self.row2), (self.p1[0]+self.col2,self.p1[1]+self.row2)]
+        factory.setVertices(self.vertices)
+        self.grids = factory.make_obj('grid',w=self.col1,h=self.row1)
+        self.context = context
+        Views.__init__(self, context.screen)
+        self.context.screen = pygame.display.set_mode((800, 600))
+
+    def run_ui(self):
+        pygame.draw.aalines(self.context.screen, (255,255,255), True, [self.p1, self.p2, self.p3, self.p4])      
+        # col
+        pygame.draw.aaline(self.context.screen, (255,255,255), (self.col1 + self.p1[0] , self.p1[1]), (self.col1 + self.p1[0], self.p4[1]))
+        pygame.draw.aaline(self.context.screen, (255,255,255), (self.col2 + self.p1[0], self.p2[1]), (self.col2 + self.p1[0], self.p3[1]))
+
+        #row
+        pygame.draw.aaline(self.context.screen, (255,255,255), (self.p1[0], self.row1 + self.p1[1]), (self.p2[0], self.row1 + self.p1[1]))
+        pygame.draw.aaline(self.context.screen, (255,255,255), (self.p1[0], self.row2 + self.p1[1]), (self.p2[0],self.row2 + self.p1[1]))
+        
+        for grid in self.grids:
+            grid.draw(self.context.screen)
+    
+    def on_event(self, event):
+        self.grids[0].get_object(event)
+        self.grids[1].get_object(event)
+        self.grids[2].get_object(event)
+        self.grids[3].get_object(event)
+        self.grids[4].get_object(event)
+        self.grids[5].get_object(event)
+        self.grids[6].get_object(event)
+        self.grids[7].get_object(event)
+        self.grids[8].get_object(event)
+
+
+""" 
+    THIS IS START MENU
+"""
+class StartView(Views):
+    def __init__(self, context):
+        #loading images
+        self.start_img = pygame.image.load('./img/start_btn.png').convert_alpha()
+        self.quit_img = pygame.image.load('./img/exit_btn.png').convert_alpha()
+
+        # modify factory
+        factory.setLocation(100, 200)
+        self.start_button = factory.make_obj('button', self.start_img)
+        #object.Button(100, 200, self.start_img, 0.7)
+        factory.setLocation(440, 200)
+        self.quit_button = factory.make_obj('button', self.quit_img)
+        self.context = context  
+        Views.__init__(self, context.screen)
+
+    def run_ui(self):
+        self.start_button.draw(self.context.screen)
+        self.quit_button.draw(self.context.screen)
+    
+    def on_event(self, event):
+        if self.start_button.on_event(event) == True:
+            self.start_game()
+        if self.quit_button.on_event(event) == True:
+            self.exit_game()
+
+    def exit_game(self):
+        self.context.running = False
+    
+    def start_game(self):
+        self.context.view = GameView((62, 70), (746, 70), (746, 580), (62, 580), self.context)
+        
