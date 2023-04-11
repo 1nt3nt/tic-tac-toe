@@ -14,7 +14,7 @@ class Objects:
         return self.name
 
 class Grid(Objects):
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, order):
         self.u = x
         self.v = y
         self.w = width
@@ -23,14 +23,15 @@ class Grid(Objects):
         self.name = 'grid'
         self.status = False # indicate if it is placed by a piece
         self.clicked = False
+        self.order = order
 
     def draw(self, screen):
         self.rect = pygame.draw.rect(screen, (255,255,255), pygame.Rect(self.u,self.v, self.w, self.h), 2)
 
-    def on_event(self, event,surface):
-        pos = pygame.mouse.get_pos()
+    def on_event(self, event, surface):
         if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
             self.clicked = True
+            pos = pygame.mouse.get_pos()
             if pygame.Rect.collidepoint(self.rect,pos[0],pos[1]) and self.status == False:
                 self.status = True
                 center = self.get_middle(pos)
@@ -40,6 +41,9 @@ class Grid(Objects):
     
     def get_status(self):
         return self.status
+
+    def get_order(self):
+        return self.order
     
     # return middle point of each grid
     def get_middle(self, pos):
@@ -74,7 +78,6 @@ class Button(Objects):
             self.clicked = False
         return action  
     
-
 class Piece(Grid):
     def __init__(self, x=0, y=0):
         self.name = 'piece'

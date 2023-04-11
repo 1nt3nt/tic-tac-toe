@@ -1,6 +1,5 @@
-#pygame.draw.rect(self.context.screen, (255,255,255), pygame.Rect(self.p1[0],self.p1[1], col1, row1), 2)
-
 import object
+
 class Factory:
     def __init__(self, vertices=[], x=0, y=0):
         self.vertices = vertices
@@ -15,8 +14,10 @@ class Factory:
                 return object.Piece(self.x, self.y)
             case 'grid':
                 grids = []
+                temp = 0
                 for vertex in self.vertices:
-                    grids.append(object.Grid(vertex[0],vertex[1],w,h))
+                    grids.append(object.Grid(vertex[0],vertex[1],w,h, temp))
+                    temp+= 1
                 return grids
             case _:
                 return "Unable to make " + obj_name

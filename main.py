@@ -16,16 +16,13 @@ class Main():
         pygame.display.set_caption("tic tac toe")
         self.view = views.StartView(self)
         self.clock = pygame.time.Clock()
-        # introduce two players
-        self.player_1 = player.Player(0, surface=self.screen)
-        self.player_2 = player.Player(1, surface=self.screen)
 
     def run(self):
         while self.running:
             for event in pygame.event.get():
+                if event.type == pygame.QUIT or pygame.key.get_pressed()[27] == 1:
+                    self.running = False                
                 self.view.on_event(event)
-                if event.type == pygame.QUIT:
-                    self.running = False
             self.view.run_ui()
             pygame.display.update()
             self.clock.tick(60)

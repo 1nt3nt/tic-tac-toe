@@ -1,6 +1,7 @@
 import pygame
 import sys
 import factory
+import player
 
 factory = factory.Factory()
 class Views:
@@ -41,6 +42,11 @@ class GameView(Views):
         Views.__init__(self, context.screen)
         self.context.screen = pygame.display.set_mode((800, 600))
 
+        #loading players
+        self.player1 = player.Player(1,factory,self.context)
+        self.player2 = player.Player(2,factory,self.context)
+        self.control = self.player1.get_UserId()
+
     def run_ui(self):
         pygame.draw.aalines(self.context.screen, (255,255,255), True, [self.p1, self.p2, self.p3, self.p4])      
         # col
@@ -50,20 +56,22 @@ class GameView(Views):
         #row
         pygame.draw.aaline(self.context.screen, (255,255,255), (self.p1[0], self.row1 + self.p1[1]), (self.p2[0], self.row1 + self.p1[1]))
         pygame.draw.aaline(self.context.screen, (255,255,255), (self.p1[0], self.row2 + self.p1[1]), (self.p2[0],self.row2 + self.p1[1]))
-        
         for grid in self.grids:
             grid.draw(self.context.screen)
+        
 
     def on_event(self, event):
-        self.grids[0].on_event(event,self.context.screen)
-        self.grids[1].on_event(event,self.context.screen)
-        self.grids[2].on_event(event,self.context.screen)
-        self.grids[3].on_event(event,self.context.screen)
-        self.grids[4].on_event(event,self.context.screen)
-        self.grids[5].on_event(event,self.context.screen)
-        self.grids[6].on_event(event,self.context.screen)
-        self.grids[7].on_event(event,self.context.screen)
-        self.grids[8].on_event(event,self.context.screen)
+        if self.control == 1:
+            self.grids[0].on_event(event,self.context.screen)
+            self.grids[1].on_event(event,self.context.screen)
+            self.grids[2].on_event(event,self.context.screen)
+            self.grids[3].on_event(event,self.context.screen)
+            self.grids[4].on_event(event,self.context.screen)
+            self.grids[5].on_event(event,self.context.screen)
+            self.grids[6].on_event(event,self.context.screen)
+            self.grids[7].on_event(event,self.context.screen)
+            self.grids[8].on_event(event,self.context.screen)
+            
         
 
 
@@ -83,6 +91,7 @@ class StartView(Views):
         factory.setLocation(440, 200)
         self.quit_button = factory.make_obj('button', self.quit_img)
         self.context = context  
+        self.clicked = False
         Views.__init__(self, context.screen)
 
     def run_ui(self):
@@ -100,4 +109,5 @@ class StartView(Views):
     
     def start_game(self):
         self.context.view = GameView((62, 70), (746, 70), (746, 580), (62, 580), self.context)
+        pygame.mouse.set_pos(342, 35)
         
