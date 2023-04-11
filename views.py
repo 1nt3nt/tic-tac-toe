@@ -27,6 +27,9 @@ class GameView(Views):
         self.p2 = r_t_p
         self.p3 = l_b_p
         self.p4 = r_b_p
+        self.clicked = False
+        self.round = 1
+
         # col
         self.col1 = (self.p2[0] - self.p1[0]) // 3
         self.col2 = 2 * self.col1
@@ -45,7 +48,9 @@ class GameView(Views):
         #loading players
         self.player1 = player.Player(1,factory,self.context)
         self.player2 = player.Player(2,factory,self.context)
-        self.control = self.player1.get_UserId()
+        #player 1 place first
+        self.player1.myRound(True)
+        self.controller = self.player1.get_UserId()
 
     def run_ui(self):
         pygame.draw.aalines(self.context.screen, (255,255,255), True, [self.p1, self.p2, self.p3, self.p4])      
@@ -59,22 +64,37 @@ class GameView(Views):
         for grid in self.grids:
             grid.draw(self.context.screen)
         
-
     def on_event(self, event):
-        if self.control == 1:
-            self.grids[0].on_event(event,self.context.screen)
-            self.grids[1].on_event(event,self.context.screen)
-            self.grids[2].on_event(event,self.context.screen)
-            self.grids[3].on_event(event,self.context.screen)
-            self.grids[4].on_event(event,self.context.screen)
-            self.grids[5].on_event(event,self.context.screen)
-            self.grids[6].on_event(event,self.context.screen)
-            self.grids[7].on_event(event,self.context.screen)
-            self.grids[8].on_event(event,self.context.screen)
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.controller == 1:             
+                self.update_view(event, self.player1)
+            elif self.controller == 2:
+                self.update_view(event, self.player2)
+        elif event.type == pygame.MOUSEBUTTONUP:
+            if self.controller == 1:
+                if self.player1.isMyRound() == False:
+                    self.controller = 2
+                    print('switch to player2')
+                self.update_view(event, self.player1)
+            elif self.controller == 2:
+                if self.player2.isMyRound() == False:
+                    self.controller = 1
+                    print('switch to player1')
+                    self.round += 1
+                self.update_view(event, self.player2)
+
+    # update screen each time when player place piece / click mouse
+    def update_view(self, event, player):
+        self.grids[0].on_event(event,self.context.screen, player)
+        self.grids[1].on_event(event,self.context.screen, player)
+        self.grids[2].on_event(event,self.context.screen, player)
+        self.grids[3].on_event(event,self.context.screen, player)
+        self.grids[4].on_event(event,self.context.screen, player)
+        self.grids[5].on_event(event,self.context.screen, player)
+        self.grids[6].on_event(event,self.context.screen, player)
+        self.grids[7].on_event(event,self.context.screen, player)
+        self.grids[8].on_event(event,self.context.screen, player)
             
-        
-
-
 """ 
     THIS IS START MENU
 """

@@ -1,4 +1,5 @@
 import pygame
+import player
 
 clicked_obj = None
 class Objects:
@@ -28,17 +29,33 @@ class Grid(Objects):
     def draw(self, screen):
         self.rect = pygame.draw.rect(screen, (255,255,255), pygame.Rect(self.u,self.v, self.w, self.h), 2)
 
-    def on_event(self, event, surface):
+    # give grid click function
+    # Click function can mark if a grid is available to place piece
+    def on_event(self, event, surface, player):
         if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
             self.clicked = True
             pos = pygame.mouse.get_pos()
             if pygame.Rect.collidepoint(self.rect,pos[0],pos[1]) and self.status == False:
                 self.status = True
                 center = self.get_middle(pos)
-                pygame.draw.circle(surface, (255,0,0), center, min(self.w//2,self.h//2)-4)
+                if player.get_UserId() == 1:
+                    circle = Circle(center[0],center[1])
+                    circle.draw(surface, min(self.w//2,self.h//2)-4)
+                elif player.get_UserId() == 2:
+                    cross = Cross((self.u,self.v), (self.u+self.w, self.v),
+                                  (self.u+self.w, self.v+self.h),
+                                  (self.u, self.v+self.h))
+                    cross.draw(surface)
+                player.placedPiece(True)
+                #pygame.draw.circle(surface, (255,0,0), center, min(self.w//2,self.h//2)-4)
+            elif pygame.Rect.collidepoint(self.rect,pos[0],pos[1]) and self.status == True:
+                player.placedPiece(False)
+                print('player: ',player.get_UserId())
         if pygame.mouse.get_pressed()[0] == 0:
             self.clicked = False
-    
+            
+
+    # check if grid is available to place piece
     def get_status(self):
         return self.status
 
@@ -83,15 +100,26 @@ class Piece(Grid):
         self.name = 'piece'
         self.rect = None
         self.clicked = False
+        self.u = x
+        self.v = y
 
-    def draw(self, surface, uid):
-        if uid == 0:
-            pygame.draw.aaline(surface, (255,0,0), (20, 20), (40,40))
-            pygame.draw.aaline(surface, (255,0,0), (40,20),(20,40))
-
-        if uid == 1:
-            pygame.draw.circle(surface, (255,255,255), (self.u,self.v), 35)
+    def draw(self, surface):
+        pass
     
-    # return the status that if piece is placed.
-    def on_event(self, event, surface):
-        return super().get_object(event, surface)
+class Circle(Piece):
+    def __init__(self, x=0, y=0):
+        super().__init__(x, y)
+    def draw(self, surface, radius):
+        pygame.draw.circle(surface, (255,0,0), (self.u,self.v), radius)
+
+class Cross(Piece):
+    def __init__(self, point1, point2, point3, point4):
+        self.p1 = point1
+        self.p2 = point2
+        self.p3 = point3
+        self.p4 = point4
+    def draw(self, surface):
+        pygame.draw.line(surface, (0,128,0), self.p1, self.p3, 5)
+        pygame.draw.line(surface, (0,128,0), self.p2, self.p4, 5)
+
+    
