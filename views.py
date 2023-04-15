@@ -75,6 +75,9 @@ class GameView(Views):
             grid.draw(self.context.screen)
         
     def on_event(self, event):
+        if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
+            if pygame.key.get_pressed()[pygame.K_ESCAPE] == 1:
+                self.context.running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.controller == 1:             
                 self.update_view(event, self.player1)
