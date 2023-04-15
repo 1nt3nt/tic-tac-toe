@@ -14,10 +14,16 @@ class Factory:
                 return object.Piece(self.x, self.y)
             case 'grid':
                 grids = []
-                temp = 0
+                row = 0
+                col = 0
                 for vertex in self.vertices:
-                    grids.append(object.Grid(vertex[0],vertex[1],w,h, temp))
-                    temp+= 1
+                    if col == 3:
+                        col = 0
+                    if row == 3:
+                        row = 0
+                    grids.append(object.Grid(vertex[0],vertex[1],w,h, (row, col)))
+                    col+= 1
+                    row += col // 3
                 return grids
             case _:
                 return "Unable to make " + obj_name

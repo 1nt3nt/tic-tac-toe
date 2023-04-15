@@ -1,13 +1,14 @@
 import pygame
 
 class Player:
-    def __init__(self, uid, factory=None, context=None):
+    def __init__(self, uid, name, factory=None, context=None):
         self.userId = uid
         self.factory = factory
         self.context = context
         self.pieces = []
         self.clicked = False
         self.control = False
+        self.name = name
 
     #check if player successfully place piece
     #if success, store piece location
@@ -19,8 +20,8 @@ class Player:
     def get_UserId(self):
         return self.userId
     
-    def check_win(self):
-        pass
+    def get_name(self):
+        return self.name
 
     # input bool 
     # set this player can place piece
@@ -30,3 +31,5 @@ class Player:
     def isMyRound(self):
         return self.control
     
+    def setWin(self):
+        print( "player: ", self.name, " win")

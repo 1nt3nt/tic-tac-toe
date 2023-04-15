@@ -31,7 +31,7 @@ class Grid(Objects):
 
     # give grid click function
     # Click function can mark if a grid is available to place piece
-    def on_event(self, event, surface, player):
+    def on_event(self, event, surface, player, recorder):
         if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
             self.clicked = True
             pos = pygame.mouse.get_pos()
@@ -41,19 +41,32 @@ class Grid(Objects):
                 if player.get_UserId() == 1:
                     circle = Circle(center[0],center[1])
                     circle.draw(surface, min(self.w//2,self.h//2)-4)
-                elif player.get_UserId() == 2:
+                elif player.get_UserId() == -1:
                     cross = Cross((self.u,self.v), (self.u+self.w, self.v),
                                   (self.u+self.w, self.v+self.h),
                                   (self.u, self.v+self.h))
                     cross.draw(surface)
                 player.placedPiece(True)
-                #pygame.draw.circle(surface, (255,0,0), center, min(self.w//2,self.h//2)-4)
+                self.recordPoints(recorder, self.order, player.get_UserId())
+                print(self.order)
             elif pygame.Rect.collidepoint(self.rect,pos[0],pos[1]) and self.status == True:
                 player.placedPiece(False)
                 print('player: ',player.get_UserId())
         if pygame.mouse.get_pressed()[0] == 0:
             self.clicked = False
-            
+       
+    def recordPoints(self, recorder, gridOrder, playerId):
+        recorder[0][gridOrder[0]] += playerId
+        recorder[1][gridOrder[1]] += playerId
+        if (gridOrder[0] == 0 and gridOrder[1] == 0 or
+            gridOrder[0] == 2 and gridOrder[1] ==2):
+            recorder[2][0] += playerId
+        elif (gridOrder[0] == 0 and gridOrder[1] == 2 or
+            gridOrder[0] == 2 and gridOrder[1] ==0):
+            recorder[2][1] += playerId
+        elif gridOrder[0] == 1 and gridOrder[1] == 1:
+            recorder[2][0] += playerId
+            recorder[2][1] += playerId
 
     # check if grid is available to place piece
     def get_status(self):
