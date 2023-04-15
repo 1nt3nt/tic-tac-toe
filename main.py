@@ -10,15 +10,15 @@ class Main():
 
     def __init__(self):
         pygame.init()
-        #pygame.mixer.init()
+        pygame.mixer.init()
         size = width, height = 800, 600
         bg = pygame.image.load('./img/background.png')
         self.screen = pygame.display.set_mode(size)
         self.screen.blit(bg,(0,0))
         pygame.display.set_caption("tic tac toe")
-        #mixer = pygame.mixer.Sound('./music/bgm.wav')
-        #mixer.play(-1)
-        #mixer.set_volume(0.6)
+        mixer = pygame.mixer.Sound('./music/03 - P.T. Adamczyk - The Rebel Path.mp3')
+        mixer.play(-1)
+        mixer.set_volume(0.7)
         self.view = views.StartView(self)
         self.clock = pygame.time.Clock()
 
