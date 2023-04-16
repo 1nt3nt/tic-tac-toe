@@ -1,7 +1,9 @@
 # tic-tac-toe
 It is an offline tic tac toe game wtih pygame.
-So far, it only supports some basic playgames, such as play, quit.
-In the future, I am going to add setting function, which will support resolution, music volumn and piece shapes.
+I try to implement Simple factory design pattern for this program. So it could be easier to create grid, object and something like that. <br />  <br />
+There are many different design patterns could be implemented in this program, which in some way can improve code management even though this is a tiny program.
+I would recommend college students like me to try different design patterns in their program, which do matter to our future career.  <br />  <br />
+So far, it only supports some basic playgames, such as play, quit. In the future, I am going to add setting function, which will support resolution, music volumn and piece shapes.
 
 ## To compile this program, there are several enviroment needs to be done
 ### 1. update your python version to/above 3.10
