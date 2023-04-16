@@ -1,6 +1,6 @@
 import sys
 import pygame
-import views
+import views 
 
 class Main():
     running = True

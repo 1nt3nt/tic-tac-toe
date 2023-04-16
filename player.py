@@ -1,6 +1,9 @@
 import pygame
 
 class Player:
+    '''
+        Player class: ease to handle controller switch and winning event
+    '''
     def __init__(self, uid, name, factory=None, context=None):
         self.userId = uid
         self.factory = factory
@@ -24,12 +27,14 @@ class Player:
         return self.name
 
     # input bool 
-    # set this player can place piece
+    # set this player if can place piece
     def myRound(self, control):
         self.control = control
     
+    # return player's statues: allow to place piece or not.
     def isMyRound(self):
         return self.control
     
+    # indicate who win
     def setWin(self):
         print( "player: ", self.name, " win")

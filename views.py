@@ -1,15 +1,9 @@
 import pygame
-import sys
 import factory
 import player
 
 factory = factory.Factory()
 
-'''
-0|1|2
-3|4|5
-6|7|8
-'''
 
 class Views:
     screen = None
@@ -22,10 +16,11 @@ class Views:
     def on_event(self, event):
         pass
 
-""" 
-    THIS IS A MESH CLASS
-"""
+# This is a main view for this game. Also known as game interface
 class GameView(Views):
+    '''
+     game interface
+    '''
     # parameter:
     # left top point and right point point, 
     # left bottom point and right bottom point
@@ -116,6 +111,7 @@ class GameView(Views):
             print("game is a draw")
             self.context.view = ResultView(self.context,False)
 
+    # find who is win or game is tie based on recorder
     def checkWin(self, recorder, player):
         for i in recorder:
             for val in i:
@@ -125,12 +121,16 @@ class GameView(Views):
                     return True
         return False
         
-
+# When game over, this view will appear
 class ResultView(Views):
+    '''
+    When game over, this view will appear
+    '''
     def __init__(self, context, result, winner=''):
         self.res = result
         self.context = context
-        self.winner = winner
+        self.winner = winner  
+     
         self.start_img = pygame.image.load('./img/start_btn.png').convert_alpha()
         self.quit_img = pygame.image.load('./img/exit_btn.png').convert_alpha()
         self.bg = pygame.image.load('./img/background.png')
@@ -168,10 +168,12 @@ class ResultView(Views):
     def start_game(self):
         self.context.view = GameView((62, 70), (746, 70), (746, 580), (62, 580), self.context)
         pygame.mouse.set_pos(342, 35)
-""" 
-    THIS IS START MENU
-"""
+
+
 class StartView(Views):
+    """ 
+    THIS IS START MENU
+    """
     def __init__(self, context):
         #loading images
         self.start_img = pygame.image.load('./img/start_btn.png').convert_alpha()

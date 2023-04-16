@@ -1,6 +1,9 @@
 import object
 
 class Factory:
+    '''
+        factory: ease to handle instance creating
+    '''
     def __init__(self, vertices=[], x=0, y=0):
         self.vertices = vertices
         self.x = x
@@ -27,13 +30,12 @@ class Factory:
                 return grids
             case _:
                 return "Unable to make " + obj_name
-        
+    
+    # used to setting object location
     def setLocation(self,x,y):
         self.x = x
         self.y = y
     
+    # used to setting vertices of mesh (checkerboard) 
     def setVertices(self, vertices):
         self.vertices = vertices
-
-    def get_objs(self):
-        pass
